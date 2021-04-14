@@ -28,7 +28,9 @@ class clusters:
         for i in range(k):
             clusters['class' + str(i)] = pd.Series(self.cluster_df[self.cluster_df['prediction'] == i]['index'].values)
         clusterVar = clusters.dropna()
-        self.clusterVar = clusterVar.reset_index()
+        clusterVar = clusterVar.reset_index()
+        self.clusterVar = clusterVar.drop('index',axis=1)
+
 
 
 
