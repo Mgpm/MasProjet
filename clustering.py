@@ -19,8 +19,15 @@ class clusters:
 
     def clusterViz(self,n,df):
         kmean = self.km(k=n,featuresCol="features",predictionCol="prediction",initMode="random")
-        model = self.km.fit(df)
-        predictions = model.transform(df)
-        cluster_df = predictions.toPandas().head(2)
+        cluster_df = kmean.fit(df).transform(df)
+        self.cluster_df = cluster_df.toPandas()
+        self.cluster_df.head()
+
+    def selectOneVarByClass(k,self,pd):
+        clusters = pd.DataFrame(index=range(self.cluster_df.shape[0]))
+        for i in range(k):
+            clusters['class' + str(i)] = pd.Series(self.cluster_df[self.cluster_df['prediction'] == i]['index'].values)
+        clusters.dropna()
+
 
 
