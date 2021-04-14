@@ -23,13 +23,15 @@ class clusters:
         self.cluster_df = cluster_df.toPandas()
         self.cluster_df.head()
 
-    def selectOneVarByClass(k,self,pd):
+    def selectOneVarByClass(self,k,pd):
         clusters = pd.DataFrame(index=range(self.cluster_df.shape[0]))
         for i in range(k):
             clusters['class' + str(i)] = pd.Series(self.cluster_df[self.cluster_df['prediction'] == i]['index'].values)
         clusterVar = clusters.dropna()
         clusterVar = clusterVar.reset_index()
         self.clusterVar = clusterVar.drop('index',axis=1)
+
+
 
 
 
