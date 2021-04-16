@@ -18,7 +18,7 @@ class loadDataVector: # Cette classe s'occupe de charges les données et les tra
         self.vectdf = vect.select('features','label').withColumn('labels',transfo('label').cast(self.t.DoubleType()))
 
 
-    def vectAssemblerFeatureImp(self,vect,vAss): # obtention du dataframe vectorisé pour la reduction par ordre de complexité
+    def vectAssemblerFeatureImp(self,vect,vAss): # obtention du dataframe vectorisé après selection pour la reduction par ordre de complexité
         dataTranspose = vect.toPandas()
         dataTranspose = dataTranspose.transpose()
         dataTranspose = dataTranspose.reset_index()
@@ -27,10 +27,10 @@ class loadDataVector: # Cette classe s'occupe de charges les données et les tra
         self.vectTransposed = vAss(inputCols=dataTransp.columns[1:],outputCol="features").transform(dataTransp)
 
 
-    def scalerStandard(self,st,vectAss): # standardise les données sur un echelle [0,1]
+    def scalerStandard(self,st,vectAss): # standardise les données sur un echelle de [0,1]
         self.Scaler_df = st(inputCol="features",outputCol='scalerfeatures').setWithStd(True).setWithMean(True).fit(vectAss).transform(vectAss)
 
-    def vizData2D(self,pca,vectSc): # affiche le graphique 2D des données
+    def vizData2D(self,pca): # affiche le graphique 2D des données
         self.pca_df = pca(inputcol="scalerfeatures",outputCol="pcafeatures").setK(2).fit(self.Scaler_df).transform(self.Scaler_df)
 
 
