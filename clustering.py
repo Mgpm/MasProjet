@@ -17,13 +17,13 @@ class clusters:
         self.plt.ylabel('SSE')
         self.plt.plot(cluster_num,errors)
 
-    def clusterViz(self,n,df):
+    def clusterViz(self,n,df): # affiche le graphique des clusters
         kmean = self.km(k=n,featuresCol="features",predictionCol="prediction",initMode="random")
         cluster_df = kmean.fit(df).transform(df)
         self.cluster_df = cluster_df.toPandas()
         self.cluster_df.head()
 
-    def selectOneVarByClass(self,k,pd):
+    def selectOneVarByClass(self,k,pd):# Selection une seul valeur de chaque class
         clusters = pd.DataFrame(index=range(self.cluster_df.shape[0]))
         for i in range(k):
             clusters['class' + str(i)] = pd.Series(self.cluster_df[self.cluster_df['prediction'] == i]['index'].values)
