@@ -18,10 +18,21 @@ class loadDataVector: # Cette classe s'occupe de charges les données et les tra
         self.vectdf = vect.select('features','label').withColumn('labels',transfo('label').cast(self.t.DoubleType()))
 
 
-    def vectAssemblerFeatureImp(self,vect,v): # obtention du dataframe vectorisé pour la reduction par ordre de complexité
+    def vectAssemblerFeatureImp(self,vect,vAss): # obtention du dataframe vectorisé pour la reduction par ordre de complexité
         dataTranspose = vect.toPandas()
         dataTranspose = dataTranspose.transpose()
         dataTranspose = dataTranspose.reset_index()
         sch1 = self.t.StructType([self.t.StructField('index',self.t.StringType(),True)]+[self.t.StructField(str(i),self.t.DoubleType(),True) for i in range(1500)])
         dataTransp = self.spark.createDataFrame(dataTranspose,schema=sch1)
-        self.vectTransposed = v(inputCols=dataTransp.columns[1:],outputCol="features").transform(dataTransp)
+        self.vectTransposed = vAss(inputCols=dataTransp.columns[1:],outputCol="features").transform(dataTransp)
+
+
+    def scalerStandard(self,st,vectAss):
+        self.Scaler_df = st(inputCol="features",outputCol='scalerfeatures').setWithStd(True).setWithMean(True).fit(vectAss).transform(vectAss)
+
+    def vizData2D(self,pca,vectSc):
+        self.pca_df = pca(inputcol="scalerfeatures",outputCol="pcafeatures").setK(2).fit(self.Scaler_df).transform(self.Scaler_df)
+
+
+
+

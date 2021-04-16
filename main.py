@@ -1,5 +1,5 @@
 from pyspark.ml.classification import RandomForestClassifier
-from pyspark.ml.feature import VectorAssembler as v,PCA,StandardScaler
+from pyspark.ml.feature import VectorAssembler as v,PCA as pc,StandardScaler as st
 from pyspark.ml.clustering import KMeans as km
 from pyspark.sql import functions as func, types as t
 import matplotlib.pyplot as plt
